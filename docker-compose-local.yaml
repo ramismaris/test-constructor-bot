@@ -1,0 +1,13 @@
+version: '3.1'
+
+services:
+  db:
+    container_name: test-constructor-bot
+    image: postgres:14.1-alpine
+    env_file:
+      - ".env"
+    restart: always
+    volumes:
+      - ./postgresql:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
