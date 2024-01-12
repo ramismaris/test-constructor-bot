@@ -52,7 +52,6 @@ async def on_message(message: types.Message, state: FSMContext, session: AsyncSe
             await AnswerDAL.create(session, answer=message.text, node_block_id=last_node_block_id, user_id=user.id)
             await on_message(message, state, session)
     elif len(node_blocks) > 1:
-        await state.update_data(last_node_id=node_id, node_id=node_blocks[0].next_node_id)
         button_node_blocks = []
         text_node_block = None
         for block in node_blocks:

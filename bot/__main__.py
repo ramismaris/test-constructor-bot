@@ -3,15 +3,21 @@ import logging
 
 from aiogram import Bot, Dispatcher
 from aiogram.enums import ParseMode
+from aiogram.fsm.storage.redis import RedisStorage
+
+from redis.asyncio import Redis
 
 from bot.handlers import user, admin
-from bot.config import TELEGRAM_BOT_TOKEN
+from bot.config import TELEGRAM_BOT_TOKEN, REDIS_HOST, REDIS_PORT, REDIS_DB_FSM
 from bot.database.session import async_session
 from bot.middlewares.db import DbSessionMiddleware
 
 
 async def main() -> None:
-    dp = Dispatcher()
+    redis_client = Redis(host=REDIS_HOST, port=REDIS_PORT, db=REDIS_DB_FSM)
+    storage = RedisStorage(redis_client)
+
+    dp = Dispatcher(storage=storage)
 
     dp.include_router(admin.router)
     dp.include_router(user.router)

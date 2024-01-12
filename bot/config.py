@@ -11,6 +11,10 @@ load_dotenv()
 
 TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
 
+REDIS_HOST = os.getenv("REDIS_HOST", default="localhost")
+REDIS_PORT = os.getenv("REDIS_PORT", default=6379)
+REDIS_DB_FSM = os.getenv("REDIS_DB_FSM", default=0)
+
 DATABASE_USER = os.getenv('POSTGRES_USER')
 DATABASE_PASSWORD = os.getenv('POSTGRES_PASSWORD')
 DATABASE_HOST = os.getenv('DBHOST')
