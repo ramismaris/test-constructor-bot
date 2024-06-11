@@ -1,7 +1,7 @@
-from sqlalchemy import select, update, desc
+from sqlalchemy import select, update, desc, asc, delete
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from bot.database.models import User, NodeBlock, Answer, Node
+from bot.database.models import User, Button, Answer, Component
 
 
 class UserDAL:
@@ -59,30 +59,56 @@ class UserDAL:
         return users.fetchall()
 
 
-class NodeDAL:
+class ComponentDAL:
     @staticmethod
-    async def read(db_session: AsyncSession, **kwargs) -> list[Node]:
-        stmt = select(Node).filter_by(**kwargs)
-        nodes = await db_session.scalars(stmt)
+    async def create(db_session: AsyncSession, **kwargs) -> Component:
+        new_component = Component(**kwargs)
+        db_session.add(new_component)
+        await db_session.commit()
 
-        return nodes.fetchall()
-
-
-class NodeBlockDAL:
-    @staticmethod
-    async def create(db_session: AsyncSession, **kwargs) -> NodeBlock:
-        pass
+        return new_component
 
     @staticmethod
-    async def read(db_session: AsyncSession, **kwargs) -> list[NodeBlock]:
-        stmt = select(NodeBlock).filter_by(**kwargs)
-        node_blocks = await db_session.scalars(stmt)
+    async def read(db_session: AsyncSession, **kwargs) -> list[Component]:
+        stmt = select(Component).filter_by(**kwargs).order_by(asc(Component.id))
+        components = await db_session.scalars(stmt)
 
-        return node_blocks.fetchall()
+        return components.fetchall()
+
+    @staticmethod
+    async def delete(db_session: AsyncSession, **kwargs):
+        stmt = delete(Component).filter_by(**kwargs)
+        await db_session.execute(stmt)
+        await db_session.commit()
+        return True
+
+
+class ButtonDAL:
+    @staticmethod
+    async def create(db_session: AsyncSession, **kwargs) -> Button:
+        new_button = Button(**kwargs)
+        db_session.add(new_button)
+        await db_session.commit()
+
+        return new_button
+
+    @staticmethod
+    async def read(db_session: AsyncSession, **kwargs) -> list[Button]:
+        stmt = select(Button).filter_by(**kwargs)
+        Component_blocks = await db_session.scalars(stmt)
+
+        return Component_blocks.fetchall()
 
     @staticmethod
     async def update(db_session: AsyncSession, block_id: int, **kwargs):
         pass
+
+    @staticmethod
+    async def delete(db_session: AsyncSession, **kwargs):
+        stmt = delete(Button).filter_by(**kwargs)
+        await db_session.execute(stmt)
+        await db_session.commit()
+        return True
 
 
 class AnswerDAL:

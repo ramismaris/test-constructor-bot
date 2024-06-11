@@ -22,26 +22,28 @@ class User(Base):
         return f'{self.id} - {self.tg_id}'
 
 
-class Node(Base):
-    __tablename__ = 'nodes'
-
-    id = Column(Integer, primary_key=True)
-
-
-class NodeBlock(Base):
-    __tablename__ = 'node_blocks'
+class Component(Base):
+    __tablename__ = 'components'
 
     id = Column(Integer, primary_key=True)
 
     content = Column(String, nullable=True)
-    block_type = Column(String)
+    type = Column(String)
     block_types = [
         'text',
         'input',
         'button',
     ]
-    node_id = Column(ForeignKey('nodes.id'))
-    next_node_id = Column(ForeignKey(f'{Node.__tablename__}.id'), nullable=True)
+    next_component_id = Column(ForeignKey(f'components.id', ondelete='SET NULL'), nullable=True)
+
+
+class Button(Base):
+    __tablename__ = 'buttons'
+
+    id = Column(Integer, primary_key=True)
+    text = Column(String)
+    component_id = Column(ForeignKey('components.id'))
+    next_component_id = Column(ForeignKey('components.id'), nullable=True)
 
 
 class Answer(Base):
@@ -49,7 +51,7 @@ class Answer(Base):
 
     id = Column(Integer, primary_key=True)
     answer = Column(String)
-    node_block_id = Column(ForeignKey('node_blocks.id'))
+    component_id = Column(ForeignKey('components.id'))
     user_id = Column(Integer, ForeignKey("users.id"))
 
     def __str__(self):

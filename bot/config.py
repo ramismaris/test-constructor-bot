@@ -11,6 +11,8 @@ load_dotenv()
 
 TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
 
+CONSTRUCTOR_API_HOST = os.getenv('CONSTRUCTOR_API_HOST')
+
 REDIS_HOST = os.getenv("REDIS_HOST", default="localhost")
 REDIS_PORT = os.getenv("REDIS_PORT", default=6379)
 REDIS_DB_FSM = os.getenv("REDIS_DB_FSM", default=0)
