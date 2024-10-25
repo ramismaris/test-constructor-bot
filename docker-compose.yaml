@@ -1,0 +1,32 @@
+version: '3.1'
+
+services:
+  bot:
+    container_name: "constructor-bot"
+    build:
+      context: .
+    restart: always
+    env_file:
+      - ".env"
+    depends_on:
+      - db
+  db:
+    container_name: "bot-constructor-db"
+    image: postgres:14.1-alpine
+    env_file:
+      - ".env"
+    restart: always
+    volumes:
+      - ./postgresql:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+  redis:
+    image: redis:latest
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./redis:/data
+    environment:
+      - REDIS_PORT=6379
+      - REDIS_DATABASES=16

@@ -27,7 +27,7 @@ async def migrate_test(session: AsyncSession, data: list):
 
 async def request_test_from_api(test_id: int):
     async with aiohttp.ClientSession() as http_session:
-        async with http_session.get(f'{CONSTRUCTOR_API_HOST}api/test/{test_id}/import') as response:
+        async with http_session.get(f'{CONSTRUCTOR_API_HOST}/api/test/{test_id}/import') as response:
             return await response.json()
 
 
